@@ -24,7 +24,7 @@ export default function MobileNav({ open, onClose }: ModalProps) {
             <div className="space-y-8 px-5">
                 <Link href='/' className='block'>Home</Link>
                 <Link href='#' className='block'>Pricing</Link>
-                <Link href='#' className='block'>Products</Link>
+                <Link href='/products' className='block'>Products</Link>
                 <Link href='#' className='block'>Resources</Link>
                 <Link href='#' className='block'>Contact Us</Link>
 
