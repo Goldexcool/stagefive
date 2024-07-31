@@ -14,6 +14,7 @@ const ThumbnailGenerator = () => {
     const [youtubeUrl, setYoutubeUrl] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [videoUploaded, setVideoUploaded] = useState(false);
 
     const handleThumbnailClick = () => {
         document.getElementById('video-upload')?.click();
@@ -25,6 +26,7 @@ const ThumbnailGenerator = () => {
             const url = URL.createObjectURL(file);
             setVideoFile(file);
             setVideoSrc(url);
+            setVideoUploaded(true); // Mark video as uploaded
         }
     };
 
@@ -49,6 +51,7 @@ const ThumbnailGenerator = () => {
                     if (response.data.items.length > 0) {
                         const videoData = response.data.items[0];
                         setVideoSrc(`https://www.youtube.com/embed/${videoData.id}`);
+                        setVideoUploaded(true); // Mark video as uploaded
                         setIsLoading(false);
                     } else {
                         setErrorMessage('No video found for the provided URL.');
@@ -105,40 +108,60 @@ const ThumbnailGenerator = () => {
                                 onChange={handleVideoUpload}
                             />
                         </div>
-                        <h3 className='text-[16px] text-[#09090B] font-[400]'>Or paste a link from YouTube</h3>
-                        <div className='relative'>
-                            <input
-                                placeholder='YouTube url link'
-                                className={`focus:outline-none py-5 px-10 rounded-[6px] placeholder:text-[#BABABC] w-full md:placeholder:text-[18px] placeholder:text-[14px] placeholder:font-[400] md:text-[18px] text-[14px] text-[#0E0E10] border-[1.5px] ${errorMessage ? 'border-red-500' : 'border-[#F97316]'}`}
-                                value={youtubeUrl}
-                                onChange={handleYoutubeUrlChange}
-                            />
-                            <Image src={link} alt='link' width={20} height={20} className='absolute top-[35%] left-3 transform pointer-events-none' />
-                        </div>
-                        {errorMessage && <p className='text-red-500 text-[14px] mt-2'>{errorMessage}</p>}
-                        <div className='flex md:gap-3 gap-1 items-center text-[#99999B] font-[400]'>
-                            <h4 className='md:text-[16px] text-[14px]'>Supported Video Links:</h4>
-                            <div className='flex gap-1'>
-                                <Image src={youtube} alt='youtube' width={20} height={20} />
-                                <h5 className='md:text-[14px] text-[12px]'>YouTube Videos</h5>
-                            </div>
-                        </div>
-                        <div className='flex w-full justify-center items-center'>
-                            <button
-                                className='bg-[#F97316] text-white rounded-[6px] p-[0.7rem] text-[16px] font-[500] w-1/3 flex justify-center items-center'
-                                onClick={handleYoutubeUrlSubmit}
-                                disabled={isLoading}
-                            >
-                                {isLoading ? (
-                                    <div className='flex items-center gap-2'>
-                                        <div className='loader'></div>
-                                        <span className='mr-2'>Uploading video</span>
+
+                        {!videoUploaded ? (
+                            <>
+                                <h3 className='text-[16px] text-[#09090B] font-[400]'>Or paste a link from YouTube</h3>
+                                <div className='relative'>
+                                    <input
+                                        placeholder='YouTube url link'
+                                        className={`focus:outline-none py-5 px-10 rounded-[6px] placeholder:text-[#BABABC] w-full md:placeholder:text-[18px] placeholder:text-[14px] placeholder:font-[400] md:text-[18px] text-[14px] text-[#0E0E10] border-[1.5px] ${errorMessage ? 'border-red-500' : 'border-[#F97316]'}`}
+                                        value={youtubeUrl}
+                                        onChange={handleYoutubeUrlChange}
+                                    />
+                                    <Image src={link} alt='link' width={20} height={20} className='absolute top-[35%] left-3 transform pointer-events-none' />
+                                </div>
+                                {errorMessage && <p className='text-red-500 text-[14px] mt-2'>{errorMessage}</p>}
+                                <div className='flex md:gap-3 gap-1 items-center text-[#99999B] font-[400]'>
+                                    <h4 className='md:text-[16px] text-[14px]'>Supported Video Links:</h4>
+                                    <div className='flex gap-1'>
+                                        <Image src={youtube} alt='youtube' width={20} height={20} />
+                                        <h5 className='md:text-[14px] text-[12px]'>YouTube Videos</h5>
                                     </div>
-                                ) : (
-                                    'Upload'
-                                )}
-                            </button>
-                        </div>
+                                </div>
+                                <div className='flex w-full justify-center items-center'>
+                                    <button
+                                        className='bg-[#F97316] text-white rounded-[6px] p-[0.7rem] text-[16px] font-[500] w-1/3 flex justify-center items-center'
+                                        onClick={handleYoutubeUrlSubmit}
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? (
+                                            <div className='flex items-center gap-2'>
+                                                <div className='loader'></div>
+                                                <span className='mr-2'>Uploading video</span>
+                                            </div>
+                                        ) : (
+                                            'Upload'
+                                        )}
+                                    </button>
+                                </div>
+                            </>
+                        ) : (
+                            <div className='new-div'>
+                                <div className='flex flex-col gap-3'>
+                                    <label>Thumbnail title (Optional)</label>
+                                    <input
+                                        placeholder='Thumbnail title'
+                                        className={`focus:outline-none py-5 px-5 rounded-[6px] placeholder:text-[#BABABC] w-full md:placeholder:text-[18px] placeholder:text-[14px] placeholder:font-[400] md:text-[18px] text-[14px] text-[#0E0E10] mb-[2rem] border-[1.5px] ${errorMessage ? 'border-gray-400' : 'border-gray-400'}`}
+                                        
+                                    />
+                                </div>
+                                <div className='flex justify-between w-full items-center gap-5'>
+                                    <button className='border-[#F97316] border-[1.3px] text-[#F97316] w-1/2 rounded-[6px] p-[0.7rem] text-[16px] font-[500]  flex justify-center items-center'>Capture Image</button>
+                                    <button className='bg-[#F97316] text-white rounded-[6px] p-[0.7rem] text-[16px] w-1/2 font-[500] flex justify-center items-center'>Auto Generate</button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>
