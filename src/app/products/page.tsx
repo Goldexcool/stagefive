@@ -8,7 +8,7 @@ import youtube from '../../Images/icons8-youtube-48 1.svg';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import thumbnailPic from '../../Images/photoPreview (1).svg';
-import down from '../../Images/down.svg';
+import down from '../../Images/Down.svg';
 
 const ThumbnailGenerator = () => {
     const [videoSrc, setVideoSrc] = useState<string | null>(null);
